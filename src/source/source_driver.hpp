@@ -259,11 +259,11 @@ void SourceDriver::processPointCloud()
     }
     sendPointCloud(msg);
 
-    DeviceInfo deviceInfo;
-    if (driver_ptr_->getDeviceInfo(deviceInfo))
-    {
-      RS_INFO << "Device Info: " << "qx" << deviceInfo.qx << " qy" << deviceInfo.qy << " qz" << deviceInfo.qz << "qw" << deviceInfo.qw << RS_REND;
-    }
+    // DeviceInfo deviceInfo;
+    // if (driver_ptr_->getDeviceInfo(deviceInfo))
+    // {
+    //   RS_INFO << "Device Info: " << "qx" << deviceInfo.qx << " qy" << deviceInfo.qy << " qz" << deviceInfo.qz << "qw" << deviceInfo.qw << RS_REND;
+    // }
     
     free_point_cloud_queue_.push(msg);
   }
