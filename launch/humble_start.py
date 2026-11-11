@@ -25,9 +25,7 @@ def install_cyclone_dds():
 def generate_launch_description():
     if os.getenv('ROS_DISTRO') == 'humble':
         print("Detected ROS 2 Humble. Checking DDS...")
-        install_cyclone_dds()
-        os.environ['RMW_IMPLEMENTATION'] = 'rmw_cyclonedds_cpp'
-        print(f"Environment Variable Set: RMW_IMPLEMENTATION={os.environ.get('RMW_IMPLEMENTATION')}")
+        # Not forcing rmw_cyclonedds_cpp: kdlidar/main.py use Fast DDS, and mixed vendors send the clouds over UDP
 
     rviz_config = get_package_share_directory('rslidar_sdk') + '/rviz/rviz2.rviz'
 
