@@ -2,6 +2,7 @@ import os
 import subprocess
 import sys
 from getpass import getpass
+from pathlib import Path
 from launch import LaunchDescription
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
@@ -27,10 +28,19 @@ def generate_launch_description():
         print("Detected ROS 2 Humble. Checking DDS...")
         # Not forcing rmw_cyclonedds_cpp: kdlidar/main.py use Fast DDS, and mixed vendors send the clouds over UDP
 
-    rviz_config = get_package_share_directory('rslidar_sdk') + '/rviz/rviz2.rviz'
+    pkg_share = get_package_share_directory('rslidar_sdk')
+    rviz_config = pkg_share + '/rviz/rviz2.rviz'
+
+    # The node's default config path is the source dir it was compiled in, which
+    # is wrong for a prebuilt install. Point it at the source config of the
+    # workspace this install belongs to: <ws>/install/rslidar_sdk/share/rslidar_sdk
+    # -> <ws>/src/rslidar_sdk/config/config.yaml
+    ws = Path(pkg_share).parents[3]
+    config_path = str(ws / 'src' / 'rslidar_sdk' / 'config' / 'config.yaml')
 
     return LaunchDescription([
-        Node(namespace='rslidar_sdk', package='rslidar_sdk', executable='rslidar_sdk_node', output='screen'),
+        Node(namespace='rslidar_sdk', package='rslidar_sdk', executable='rslidar_sdk_node', output='screen',
+             parameters=[{'config_path': config_path}]),
         # Node(namespace='rviz2', package='rviz2', executable='rviz2', arguments=['-d', rviz_config])
     ])
 
